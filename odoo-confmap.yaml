@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: odoo-confmap
+  namespace: odoonamespace
+data:
+  db_host: database
+  db_port: "5432"
+  db_user: odoo
+  odoo.conf: |
+    [options]
+    db_host = database
+    db_port = 5432
+    db_user = odoo

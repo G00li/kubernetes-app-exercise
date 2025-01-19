@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: odoonamespace
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: odoo-deployment
+  namespace: odoonamespace
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: odoo
+  template:
+    metadata:
+      labels:
+        app: odoo
+    spec:
+      containers:
+      - name: odoo
+        image: "odoo:18"
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: HOST
+          valueFrom:
+            configMapKeyRef:
+              name: odoo-confmap
+              key: db_host
+        - name: PORT
+          valueFrom:
+            configMapKeyRef:
+              name: odoo-confmap
+              key: db_port
+        - name: USER
+          valueFrom:
+            configMapKeyRef:
+              name: odoo-confmap
+              key: db_user
+        - name: PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: odoo-secret
+              key: db_password
+        volumeMounts:
+        - name: odoo-config-volume
+          mountPath: /etc/odoo/odoo.conf
+          subPath: odoo.conf
+      volumes:
+      - name: odoo-config-volume
+        configMap:
+          name: odoo-confmap

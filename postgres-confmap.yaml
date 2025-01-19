@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-confmap
+  namespace: odoonamespace
+data:
+  postgres_user: odoo
+  postgres_db: odoo_db
